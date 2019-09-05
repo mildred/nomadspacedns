@@ -26,11 +26,19 @@ type Args struct {
 	Domain       string
 }
 
+func stringEnv(name, defVal string) string {
+	val, hasVal := os.LookupEnv(name)
+	if !hasVal {
+		val = defVal
+	}
+	return val
+}
+
 func main() {
 	var args Args
 	//flag.StringVar(&args.ConsulServer, "consul-server", "127.0.0.1:8600", "Consul DNS server")
-	flag.StringVar(&args.Listen, "listen", "127.0.0.1:9653", "Listen address")
-	flag.StringVar(&args.Domain, "domain", "ns-consul.", "Domain to serve")
+	flag.StringVar(&args.Listen, "listen", stringEnv("NSDNS_LISTEN_ADDR", "127.0.0.1:9653"), "Listen address [NSDNS_LISTEN_ADDR]")
+	flag.StringVar(&args.Domain, "domain", stringEnv("NSDNS_DOMAIN", "ns-consul."), "Domain to serve [NSDNS_DOMAIN]")
 	flag.Parse()
 
 	if !strings.HasSuffix(args.Domain, ".") {

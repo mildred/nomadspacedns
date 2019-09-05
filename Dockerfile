@@ -8,4 +8,5 @@ RUN go install ./cmd/nsdns
 
 FROM scratch
 COPY --from=build /go/bin/nsdns /nsdns
+ENV NSDNS_LISTEN_ADDR 0.0.0.0:53
 CMD /nsdns
